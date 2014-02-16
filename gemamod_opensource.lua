@@ -1,7 +1,6 @@
-
 PLUGIN_NAME = "SilverCloudGemaMod OpenSource version"
 PLUGIN_AUTHOR = "Jg99" -- Jg99
-PLUGIN_VERSION = "4.0" -- SilverCloud Gema mod
+PLUGIN_VERSION = "4.1" -- SilverCloud Gema mod
 
 dofile("lua/scripts/functions/functions.lua")
 -- common
@@ -128,6 +127,17 @@ function sorted_records(records)
     table.insert(sorted_records, { player, delta })
   end
   table.sort(sorted_records, function (L, R) return L[2] < R[2] end)
+  return sorted_records
+end
+
+
+function reverse_sorted_records(records)
+  if records == nil then return nil end
+  local sorted_records = {}
+  for player, delta in pairs(records) do
+    table.insert(sorted_records, { player, delta })
+  end
+  table.sort(sorted_records, function (L, R) return L[2] > R[2] end)
   return sorted_records
 end
 
@@ -282,7 +292,7 @@ end
   ["!inf"] = {
     { false, false, false };
     function(cn)
-      say("\f9SilverCloud\f4 Gema Mod \fR v. 4.0 OpenSource , Copyleft 2011-2013 SilverCloudTech (Jg99), No Rights Reserved.", cn)
+      say("\f9SilverCloud\f4 Gema Mod \fR v. 4.1 OpenSource , Copyleft 2011-2014 SilverCloudTech (Jg99), No Rights Reserved.", cn)
 say("\fR Lua AC Executables made by Sveark. \f9Our website is \f4www.sctechusa.com.", cn)
 
     end
@@ -589,6 +599,31 @@ say("\f4You have " ..(autogemakick and "enabled" or "disabled").. " auto gema an
 end
 };
 
+  ["!mapbottom"] =
+  {
+    { false, false, true };
+    function (cn, args)
+	logline(2, getname(cn).." viewed mapbottom")
+      local sorted_records = reverse_sorted_records(load_records(getmapname()))
+     if sorted_records == nil then
+        say("\f1MAP BOTTOM IS EMPTY", cn)
+      else
+	local record = {}
+        for i, record in ipairs(sorted_records) do
+          if i > 5 then break end
+	      if record == nil then
+              say("\f1MAP BOTTOM IS EMPTY", cn)
+              break
+            else
+              if i == 1 then say("\f1 SLOWEST PLAYERS OF THIS MAP:", cn) end
+              say(string.format("\f1%d. \f2%s \f0%02d:%02d", i, record[1], record[2] / 60, record[2] % 60), cn)
+            end
+        end
+      end
+    end
+  };
+  
+  
   ["!maptop"] =
   {
     { false, false, true };
@@ -607,6 +642,51 @@ end
   };
 
  
+["!mrank"] = --accepts name to check
+{
+    { false, false, true };
+    function (cn, args)
+	local data ="(self)"
+	if args[1] ~= nil then data = ": "..table.concat(args, " ") end
+	logline(2, getname(cn).." viewed mrank"..data)
+      local sorted_records = sorted_records(load_records(getmapname()))
+      if sorted_records == nil then
+        say("\f1NO RECORDS FOR THIS MAP", cn)
+	return
+      else
+        local prn = nil
+	local player_name = getname(cn)
+	if args[1] ~=nil then player_name = args[1] end --use supplied name instead of self
+        for i, record in ipairs(sorted_records) do
+          total_records = i
+	    if record == nil then
+           say("\f1NO RECORDS FOR THIS MAP", cn)
+            return
+          else -- look for player and get time
+            if player_name == record[1] and prn == nil then -- get only first record incase there are duplicated names
+              prt = record[2]
+              prn = i
+            end
+          end
+        end
+        if prn == nil then
+	  if args[1] == nil then
+            say("\f1YOU DON'T HAVE ANY RECORDS YET. MAKE AT LEAST ONE RECORD", cn)
+	  else
+	    say("\f1" .. args[1] .. " Does not have a record for this map", cn)
+	  end
+        else
+	  if args[1] == nil then
+            sayexept(string.format("\f2%s`s \f1 RANK FOR THIS MAP IS \f0%d \f1of \f0%d \f1TIME: \f2%02d:%02d ",player_name, prn, total_records, prt/60, prt % 60), cn) 
+            say(string.format("\f2%s\f1, YOUR MAP RANK IS \f0%d \f1of \f0%d \f1TIME: \f2%02d:%02d ",player_name, prn, total_records, prt/60, prt % 60), cn) 
+	  else
+	    say(string.format("\f2%s`s \f1 RANK FOR THIS MAP IS \f0%d \f1of \f0%d \f1TIME: \f2%02d:%02d ",player_name, prn, total_records, prt/60, prt % 60), cn)
+	  end
+        end
+      end
+    end
+};
+
   ["!mapbest"] =
   {
     { false, false, true };
