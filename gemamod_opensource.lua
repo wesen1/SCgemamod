@@ -958,15 +958,6 @@ function onPlayerConnect(cn)
 setautoteam(false)
 end
 
-function onPlayerDeath(tcn, acn, gib, gun)
-	if acn ~= tcn and autogemakick and isTeammode(getgamemode()) then
-		if getteam(acn) == getteam(tcn) then
-			disconnect(acn, DISC_MKICK)
-		elseif getfrags(acn) >= 2 and config.gema_mode_is_turned_on then
-			disconnect(acn, DISC_MKICK)
-		end
-	end
-	end
 function onPlayerCallVote(cn, type, text, number)
     if (type == SA_AUTOTEAM) and (not getautoteam()) then
         voteend(VOTE_NO)
