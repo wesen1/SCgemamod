@@ -1,6 +1,6 @@
 PLUGIN_NAME = "SilverCloudGemaMod OpenSource version"
 PLUGIN_AUTHOR = "Jg99" -- Jg99
-PLUGIN_VERSION = "4.1" -- SilverCloud Gema mod
+PLUGIN_VERSION = "4.1.1" -- SilverCloud Gema mod
 
 dofile("lua/scripts/functions/functions.lua")
 -- common
