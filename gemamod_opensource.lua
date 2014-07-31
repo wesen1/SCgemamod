@@ -303,11 +303,11 @@ say("\fR Lua AC Executables made by Sveark. \f9Our website is \f4www.sctechusa.c
     { false, false, false };
     function (cn, args)
       if tonumber(args[1]) < 16 and tonumber(args[1]) > 2 then
-        -- elseif args > 2 then
+      
       settimeleft(tonumber(args[1]))
-        say(string.format("\fR [SERVER INFO] \f4 Time remaining changed to %d", args[1]))
+       -- say(string.format("\fR [SERVER INFO] \f4 Time remaining changed to %d", args[1])) -- commented out due to potential spam
         else
-        say(string.format("\f3 ERROR: Time has to be between 3 and 15 minutes, %s!", getname(cn)))$
+     --   say(string.format("\f3 ERROR: Time has to be between 3 and 15 minutes, %s!", getname(cn)))$
 end
     end
   };
