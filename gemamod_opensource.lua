@@ -1,6 +1,6 @@
 PLUGIN_NAME = "SilverCloudGemaMod OpenSource version"
 PLUGIN_AUTHOR = "Jg99" -- Jg99
-PLUGIN_VERSION = "4.1.1" -- SilverCloud Gema mod
+PLUGIN_VERSION = "4.2.0" -- SilverCloud Gema mod
 
 dofile("lua/scripts/functions/functions.lua")
 -- common
@@ -298,42 +298,20 @@ say("\fR Lua AC Executables made by Sveark. \f9Our website is \f4www.sctechusa.c
     end
   };
 
-   --[[ ["!login"] =
+ ["!addtime"] =
   {
     { false, false, false };
     function (cn, args)
-
- if not login then
- say(" \f4[\fRSERVER INFO\f4]  \fR" .. getname(cn) .. "\f4 failed to login. The$
-
-
- elseif args[1] == "admin" then
-  if args[2] == "temppass" then
-
-   say("\f4 [\fRSERVER INFO\f4]  \fR" .. getname(cn) .. "\f4 logged in.")
-
-   if multipleadmins then
-    setrole(cn, 1, false)
-   else
-    setrole(cn, 1, true)
-   end
-  end
-
-
- elseif args[1] == "0" then
-  if args[2] == "1" then
-
-   say("\f4 [\fRSERVER INFO\f4]  \fR" .. getname(cn) .. "\f4 logged in.")
-
-   if multipleadmins then
-    setrole(cn, 1, false)
-   else
-    setrole(cn, 1, true)
-   end
-  end
+      if tonumber(args[1]) < 16 and tonumber(args[1]) > 2 then
+        -- elseif args > 2 then
+      settimeleft(tonumber(args[1]))
+        say(string.format("\fR [SERVER INFO] \f4 Time remaining changed to %d", args[1]))
+        else
+        say(string.format("\f3 ERROR: Time has to be between 3 and 15 minutes, %s!", getname(cn)))$
 end
-end
-};
+    end
+  };
+
 --]]
   ["!ext"] = 
   {
