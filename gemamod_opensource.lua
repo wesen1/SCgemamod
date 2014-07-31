@@ -256,7 +256,7 @@ end
     { false, false, false };
     function (cn, args)
       say("\fP-------------------------------------------------------------------------------------------------------------------------------------------------------", cn)
-      say("\f4AVAILABLE COMMANDS: \fP| \fR!mapbest \fP| \fR!grank \fP| \fR!mybest \fP| \fR!maptop \fP| \fR!pm \f4<CN> <TEXT>\fP| \fR !whois \f4 <CN> \fP| \fR !rules \fP| \fR !gemarules \fP|\fR !gtop \fP| \fR !inf \fP|", cn)
+      say("\f4AVAILABLE COMMANDS: \fP| \fR!mapbest \fP| \fR!grank \fP| \fR!mybest \fP| \fR!maptop \fP| \fR!pm \f4<CN> <TEXT>\fP| \fR !whois \f4 <CN> \fP| \fR !rules \fP| \fR !gemarules \fP|\fR !gtop \fP| \fR !inf \fP| \fR!addtime \fP|", cn)
       say("\fP-------------------------------------------------------------------------------------------------------------------------------------------------------", cn)
      
  
