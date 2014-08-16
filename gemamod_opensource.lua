@@ -1,6 +1,6 @@
 PLUGIN_NAME = "SilverCloudGemaMod OpenSource version"
 PLUGIN_AUTHOR = "Jg99" -- Jg99
-PLUGIN_VERSION = "4.2.0" -- SilverCloud Gema mod
+PLUGIN_VERSION = "4.2.1" -- SilverCloud Gema mod
 
 dofile("lua/scripts/functions/functions.lua")
 -- common
@@ -292,7 +292,7 @@ end
   ["!inf"] = {
     { false, false, false };
     function(cn)
-      say("\f9SilverCloud\f4 Gema Mod \fR v. 4.1 OpenSource , Copyleft 2011-2014 SilverCloudTech (Jg99), No Rights Reserved.", cn)
+      say("\f9SilverCloud\f4 Gema Mod \fR v. 4.2.1 OpenSource , Copyleft 2011-2014 SilverCloudTech (Jg99), No Rights Reserved.", cn)
 say("\fR Lua AC Executables made by Sveark. \f9Our website is \f4www.sctechusa.com.", cn)
 
     end
@@ -782,20 +782,20 @@ else
 
 -- handlers
 
-function onPlayerDeathAfter(tcn, acn, gib, gun) 
-	if acn ~= tcn  and isTeammode(getgamemode()) then
-		if getteam(acn) == getteam(tcn) then
-			ban(acn)			
-		--	say(string.format("\f4Player \f3%s\f4 has been autobanned for \f9 gema killing. \f4 Ip-address: \f8 %s.", getname(cn), getip(cn)))
-	say("\f4 Player has been \f9AUTOBANNED.")
-		elseif getfrags(acn) >= 4 and config.gema_mode_is_turned_on then
-			ban(acn)
-	--		say(string.format("\f4Player \f3%s\f4 has been autobanned for \f9 gema killing. \f4 Ip-address: \f8 %s.", getname(cn), getip(cn)))		
-			say("\f4 Player has been \f9AUTOBANNED.")
---	ban(acn)
-		end
-	end
-end
+    function onPlayerDeathAfter(tcn, acn, gib, gun)
+        if acn ~= tcn and config.gema_mode_is_turned_on and autogemakick and isTeammode(getgamemode()) then
+            local totalkills = getfrags(acn) + getteamkills(acn) * 2
+            if totalkills >= 3 then
+                say("\f4Player \f4" .. getname(acn) .. "has been autobanned for \f3 gema killing. \f4 IP-address:" .. getip(acn))
+                ban(acn)
+            elseif totalkills then
+               -- disconnect(acn, DISC_MKICK)
+                say("\f4Player \f3" .. getname(acn) .. "\f4 has been autokicked for \f3 gema killing.")
+                disconnect(acn, DISC_MKICK)
+            end
+        end
+    end
+
 
 
   function onPlayerSayText(cn, text)
