@@ -2,7 +2,7 @@ Here is how you can set up a test server in virtual box :
 
 1.) Install Ubuntu on Virtualbox
 2.) Download AssaultCube for Linux from AssaultCube Website
-3.) Extract the tar.gz and the tar file
+3.) Extract the tar.gz and the tar file, edit the server config files in /config
 4.) Download Lua Mod for AssaultCube from gema.forumactif.com
 5.) Extract the Lua files in the AssaultCube folder
 6.) You can download a lua mod as base for your work
