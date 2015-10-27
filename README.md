@@ -1,7 +1,5 @@
-SCgemamod
-=========
+wesen's gema mod
 
-Open source version of SilverCloud Gema Mod in AssaultCube. It's for Lua AC servers.
+This is the lua mod I created some time ago. It is based on JG99's gema mod and includes some ideas of other people.
 
-If you want to modify this project, just fork it. Just be sure to give credit.
-I quit Assault Cube, so go ahead and do what you want with this mod if you decide to make a fork.
+Link to JG99's gema mod : https://github.com/Jg99/SCgemamod

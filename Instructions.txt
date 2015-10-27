@@ -1,8 +1,17 @@
-Instructions
+Here is how you can set up a test server in virtual box : 
 
-Download Sveark's Lua mod at http://sveark.info/ac/lua/
-Just download the executable.
-Extract, and put the lua file(s) in lua/scripts/
+1.) Install Ubuntu on Virtualbox
+2.) Download AssaultCube for Linux from AssaultCube Website
+3.) Extract the tar.gz and the tar file
+4.) Download Lua Mod for AssaultCube from gema.forumactif.com
+5.) Extract the Lua files in the AssaultCube folder
+6.) You can download a lua mod as base for your work
+7.) Modify the lua mod
+8.) use sudo apt-get install lib32stdc++6 lib32z1
 
-You can edit this file to your preference, but please include credits!
-A regular text editor will work!
+optional : 
+You can use shared folders to edit the lua files with a windows tool and only use the virtualbox to run the server
+
+1.) Create a shared folder
+2.) in Linux terminal type 'sudo mount -t vboxsf "your shared folder name" "path where the folder content should be placed in the virtual pc"'
+3.) When you got the right command, copy and paste it to /etc/rc.local, this will start that command automatically on system start
