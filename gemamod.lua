@@ -50,8 +50,6 @@ other things:
 			!stats
 				maps uploaded : 
 				records :
-				
-	 fix !pm and say etc with multiple same IPs
 ]]
 
 PLUGIN_NAME = "wesen's gemamod"
@@ -323,7 +321,7 @@ end
 
 function sendMOTD(cn)									-- send MOTD, some information about the map and about !cmds
    if cn == nil then cn = -1 end
-   mapbest(getmapname())
+   mapbest(getmapname(),nil,cn)
    local count, missing_weapons = get_missing_weapons()
    local total_records = get_totalrecords(getmapname())
    local s = "s"
@@ -837,7 +835,7 @@ function SayToAll(text, cn, color)	-- say text to all, color = text color
 		end
 	else
 		for n=0,16,1 do
-			if isconnected (n) and (n ~= cn or ignore[cn..""..n]==false) then say(name_color .. "".. getname(cn) .. ":" .. color .. " " .. text) end
+			if isconnected (n) and (n ~= cn or ignore[cn..""..n]==false) then say(name_color .. "".. getname(cn) .. ":" .. color .. " " .. text,n) end
 		end
 	end
 end
