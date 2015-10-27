@@ -15,3 +15,11 @@ You can use shared folders to edit the lua files with a windows tool and only us
 1.) Create a shared folder
 2.) in Linux terminal type 'sudo mount -t vboxsf "your shared folder name" "path where the folder content should be placed in the virtual pc"'
 3.) When you got the right command, copy and paste it to /etc/rc.local, this will start that command automatically on system start
+
+------------------------------------------------
+What to do after you prepared the server :
+
+Copy the geoip folder into lua/config folder
+Copy the gemamod.lua file into /lua/scripts folder
+
+Then open a terminal and navigate to the folder with your server.sh file and type './server.sh' to start the server
