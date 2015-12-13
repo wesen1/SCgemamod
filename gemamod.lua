@@ -775,7 +775,7 @@ function SayToAll(text, cn, color)	-- say text to all, color = text color
 	if color == nil then color = "\fP" end
 	if not isadmin(cn) and not ismodo(cn) then
 		for n=0,20,1 do
-			if isconnected(n) and ignore[n..""..cn] == false then
+			if isconnected(n) and ignore[n..""..cn] ~= true then
 				say(name_color .. "".. getname(cn) .. ": " .. color .. "" .. text,n)
 			end
 		end
@@ -1616,7 +1616,9 @@ function onPlayerSayText(cn, text)
 		return PLUGIN_BLOCK
 	end
 		
-	if not ismuted(cn) then SayToAll(text, cn, get_text_color(cn))
+	if not ismuted(cn) then 
+		SayToAll(text, cn, get_text_color(cn))
+		return PLUGIN_BLOCK
 	else say ("\f3Message could not be delivered. You have been muted (reason: " .. muted_reason(cn).. ")",cn)
 	end
 end
