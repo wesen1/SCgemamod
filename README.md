@@ -38,6 +38,7 @@ my ideas :
 	make everything working with an empty server too (for example maptop)
 	delservermap (mapname)
 	delfromrandomrot (mapname)
+	!autokick <cn> : in case of !ban not working properly
 		
 current bugs:
 	can't vote that often : players can not vote very often
