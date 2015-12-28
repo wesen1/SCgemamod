@@ -36,3 +36,4 @@ How to install this lua mod :
 
 Copy the geoip folder to lua/config/
 Copy the gemamod.lua file to /lua/scripts/
+Create a new folder named "maptop" in lua/config
