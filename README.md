@@ -56,7 +56,8 @@ The Lua Mod is using functions / ideas of:
   * amount of maps uploaded
   * records
 
-I quit this game and I think gema central killed the classic game as well as the fun of playing gema in the first place.
+
+I will no longer work on this project, make sure to checkout the gemamod-v2 branch for the latest changes.
 
 ## Special thanks to:
 
