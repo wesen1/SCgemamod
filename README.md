@@ -11,6 +11,11 @@ The Lua Mod is using functions / ideas of:
 - Baruch / .45|	: save records in milliseconds, flag reset, moderators, isip()
 - grenadier		: geoip
 
+# Lua Mod Documentation
+
+* https://web.archive.org/web/20111102112829/http://sveark.info/ac/Lua/
+* Check the lua server source files (not all functions are documented on the website)
+
 ## Ideas:
 
 - save logfile in other place or create own logfile (=> create new logfile every day)
