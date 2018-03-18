@@ -1,7 +1,6 @@
-# wesen's gema mod
+This project will be completely converted into a new version, then this repository will be deleted.
 
-This is the lua mod I created some time ago. It is based on JG99's gema mod and includes some ideas of other people.
-Including an offline cube script gema mod.
+# wesen's gema mod
 
 The Lua Mod is using functions / ideas of:
 
@@ -19,7 +18,6 @@ The Lua Mod is using functions / ideas of:
   * send irc to chat and send ingame chat to irc (of all servers/ server ports)
   * !ignoreirc : players can ignore irc chat to avoid spam
 - AoX| :
-  * add sent maps to random maprot
   * !randomrot  (de/activate random maprot) for moderator and admins		
 - Gema Avenger :
   * save timestring with record 
@@ -30,15 +28,11 @@ The Lua Mod is using functions / ideas of:
 - unlockall() / reset_locked ()
 - anti spam (chat and sendmap)
 - save every record, don't overwrite in case of hackers using same names like existing records, so you can restore the old records when the hacked one is deleted
-- add "invalid arguments" error message to every command
-- make everything working with an empty server too (for example maptop)
 - delservermap (mapname)
-- delfromrandomrot (mapname)
 - !autokick <cn> : in case of !ban not working properly
 		
 ## current bugs:
 - can't vote that often : players can not vote very often
-- load for 2934024109348 minuts : random big number instead of the real time the next map starts with
 - delrecord not working
 		
 ## other things:
@@ -56,10 +50,8 @@ The Lua Mod is using functions / ideas of:
   * amount of maps uploaded
   * records
 
-
-I will no longer work on this project, make sure to checkout the gemamod-v2 branch for the latest changes.
-
 ## Special thanks to:
 
 - +f0r3v3r+ and .45|Todesgurke for trusting me enough to give me an admin password for their servers
 - boss and Arisu-chan for playing gemas with me
+
