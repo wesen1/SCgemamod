@@ -1,5 +1,10 @@
 This project will be completely converted into a new version, then this repository will be deleted.
 
+Note:
+* The V2 version had a failed git commit.
+* The source files are all gone (hard disk was reformatted multiple times before recognizing the mistake).
+* I am confident to be able to recreate my gema mod from scratch and to do better than the source files that I lost.
+
 # wesen's gema mod
 
 The Lua Mod is using functions / ideas of:
@@ -64,6 +69,8 @@ A list of maps (including a lot of gema maps) can be found here:
 - !stats
   * amount of maps uploaded
   * records
+* create a web interface for map- and gtops
+
 
 ## Special thanks to:
 
