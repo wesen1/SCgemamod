@@ -18,7 +18,13 @@ The Lua Mod is using functions / ideas of:
 
 # Gema Maps
 
-A list of maps (including a lot of gema maps) can be found here: frag.gq/packages/maps/
+A list of maps (including a lot of gema maps) can be found here:
+
+* frag.gq/packages/maps/
+* http://www.mirari.fr/9n16
+* http://ny.aox-ac.net/Contents/packages/maps/servermaps/mapsls.txt
+* http://forum.cubers.net/showthread.php?mode=linear&tid=7383&pid=144486
+
 
 ## Ideas:
 
