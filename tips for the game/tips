@@ -1,0 +1,174 @@
+Trolling/Cheating:
+
+
+Master Server Ban Evasion:
+
+
+There are two types of master server bans:
+
+1. Real ban:
+	* When you try to update the server list you get "Master server not responding". 
+	* When you try to connect to a server directly you will disconnect and a message says "You have been banned from this server" (despite not
+	  being blacklisted or banned by the server owners).
+
+2. Fake ban: 
+	* When you try to update the server list you get "Master server not responding". 
+	* You can directly connect to servers without any problems.
+
+Usually at the beginning of your ban time you are really banned from the game (1), but after some days it is changed to a fake ban (2).
+
+
+If your ban is a fake ban you can easily evade it by doing the following:
+
+1. Open <Assaultcube installation directory>/config/menus_multiplayer.cfg with any editor
+2. Remove "updatefrommaster" from "const joinservermenu [ -> ... <- ]"
+
+Now you can continue playing the game normally, the only difference is that you don't get information about servers that were launched after your ban (which probably are about 0).
+
+
+Copy the server.cfg file to your config directory (home/username/.assaultcube... or C:/Users/username/Documents/Assautcube...) if you already deleted it.
+
+
+
+Call ban votes:
+
+
+Servers often don't let you call votes to ban other players. When you are in the same team like the target (RVSF, CLA, SPECTATOR) it is more likely that you can call the vote.
+
+
+
+Vote multiple times:
+
+
+You can start multiple instances of the game and then connect with all of them to the same server. Now you can call your vote and press F1 with each instance to get votes passed easier. Use different names to make it not obvious that you are connected multiple times.
+
+
+
+Ban evasion:
+
+
+When someone calls a vote to ban you, just disconnect and wait some time. The vote will fail and you can come back to continue. When an server admin is around you should not go back though as he can ban you instantly.
+
+
+---------------------------------------------------------
+
+Gema Stuff:
+
+
+Recommended settings:
+
+Use mashs gema reset script:  http://forum.cubers.net/showthread.php?mode=linear&tid=38&pid=165672#pid165672
+
+=> copy content to <Install Dir>/config/autoexec.cfg
+
+Weapon: Assault Rifle (easiest, fastest and on some maps the only weapon which allows you to finish the map)
+
+clockdisplay 1 		: show how much time is remaining (will show a wrong time when time is extended)
+akimboautoswitch 0	: don't switch to akimbo on pick up
+voicecomsounds 0	: ignore annoying spammer sounds
+showspeed 1		: can be used to check how fast you are at the moment
+
+bind MOUSE3 respawn	: reset
+bind return spectate	: pause
+bind 9 disconnect	: quickly flee from a server if possible
+
+hold ALT to see the full map
+
+for server testing: gema_noob
+hax training: hax_gema
+
+
+
+
+
+
+What is gema?
+
+Gema maps are obstacle courses and riddles. You need different techniques to proceed and you need to find the path to the flags.
+
+
+Common tips:
+
+1. Routing: Explore new maps, find the way to the flags and try any shortcut that you can think of. You can check the map in edit mode offline for any hidden passages. You can also watch how other players solve the map to possibly find faster ways of finishing it.
+
+2. Reloading: Plan when to reload, the best idea is to reload when you can continue without shooting while reloading.
+
+3. Turn around, shoot and jump continously to move the fastest way possible. You can pause shooting if necessary to land on platforms.
+
+4. Hidden passages: Often there are hidden passages in walls that look like they are massive. You can see them on the map mostly.
+
+5. Mazes: You can mostly look at the map to find the correct path. Sometimes the walls are invisible on the map.
+
+6. Don't give up when you see a fast time in the maptop. It is highly likely that the time is not optimised and can be beaten.
+
+
+
+Techniques:
+
+1. Grenades
+
+1.1 Mechanics
+
+If you look directly on the ground (move mouse towards you until viewing angle doesn't change anymore) and throw a nade it will not bounce. However if you slightly move the mouse forward and then throw the nade it will bounce like usually.
+
+
+1.2 Nade jumps
+
+Need: non bouncing nade
+
+Explaination: Throw a grenade on the bottom. Jump and shoot down just before the nade explodes to get the highest possible jump. You can go back and run forwards before the nade explodes or you can use a hax jump on the grenade to get a really high jump. Timing seems to be the only thing that manipulates the jump height.
+
+
+
+2. Go through clips
+
+
+2.1 Shooting
+
+Shoot the ceiling to go through the floor. Mostly these clips are invisible so you can see where to go. Sometimes they are hidden in platforms though.
+
+
+2.2 Using a grenade
+
+You can use a nade explosion above you to get through clips. You need at least 100 HP/ 50 Armor to not die.
+
+Method A: 
+Look directly on the ground, then move the mouse slightly forward. Throw the nade and instantly crouch walk forward a small step. This way you should go under the nade and it will land on your head. This method is recommended because it doesn't rely on low ceilings and works anywhere.
+
+Method B:
+Look at the ceiling and throw the nade. It will land on your head and push you downwards. This only works when the ceiling is low enough.
+
+
+You can use Method B and hold the nade to go through clips with non full health. 
+
+
+
+2. Hax jump
+
+Hax jumps are double jumps. Using a hax jump you can jump up to 12 cubes high and ?? cubes wide. Hax jumps can be used to use unintended shortcuts.
+
+Explaination: 
+
+You have to be strafe running (W+A, W+D, S+A, S+D).
+Then press SHIFT and SPACE just when landing after a jump (needs very precise timing). 
+Just after that hit SPACE, if done with the correct timing you will do a hax jump.
+
+Depending on how good your timing was the hax jump will be higher or lower.
+
+
+
+3. Low ceiling gaps
+
+3.1 Easy low ceiling
+
+Jump and instantly hold crouch, if the ceiling is not too low you will not touch the ceiling. You can combine this with shooting downwards while falling down to jump over a lot of gaps.
+
+
+3.2 Hard low ceiling
+
+Spam CROUCH and JUMP and try to backwards jump shoot over the gap.
+
+
+4. Low ceiling tunnels
+
+Spam CROUCH and JUMP while shooting backwards. The angle you are looking at seems to manipulate how fast you can go.
