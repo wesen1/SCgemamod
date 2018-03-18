@@ -16,6 +16,10 @@ The Lua Mod is using functions / ideas of:
 * https://web.archive.org/web/20111102112829/http://sveark.info/ac/Lua/
 * Check the lua server source files (not all functions are documented on the website)
 
+# Gema Maps
+
+A list of maps (including a lot of gema maps) can be found here: frag.gq/packages/maps/
+
 ## Ideas:
 
 - save logfile in other place or create own logfile (=> create new logfile every day)
