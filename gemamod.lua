@@ -882,7 +882,7 @@ commands =
 
 	if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
-    say("\f9moderator commands: \f8!ban <cn> <reason>  !ext <minutes>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
+    say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
 	say("\f8                       !mute <cn> <reason>  !unlock <cn>  !unmute <cn>  !who <cn>")
     end
 
@@ -911,7 +911,7 @@ commands =
      say("\fPregular commands: \fN!addminute   !allcmds   !grank   !gtop   !maptop    !mrank   !pm <cn> <text>",cn)
     if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
-    say("\f2moderator commands: \f9!ban <cn> <reason>  !ext <minutes>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
+    say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
 	say("\f9                       !mute <cn> <reason>  !unlock <cn>  !unmute <cn>  !who <cn>")
     end
 
@@ -1231,22 +1231,6 @@ commands =
 			end
 		else say ("\f3invalid arguments",cn)
 		end
-	end
-};
-
-["!ext"] = 	-- set new time limit
-{
-	1;
-	function (cn, args)
-		local tmp_time = tonumber(args[1])
-		if #args == 1 and tmp_time ~= nil then 
-			if tmp_time >= 35790*60000 then say ("\f3error, value to high. If the value is higher than 35790 the game will end!",cn) return
-			elseif tmp_time < 0	then say("\f3error, value to low. If the value is zero or lower the game will end!",cn) return
-			end
-			settimeleft(tmp_time)
-		else say ("\f3invalid arguments",cn)
-		end
-		say("\f3Time extended to " .. gettimeleft() .. " minutes",cn)
 	end
 };
 
