@@ -842,7 +842,7 @@ commands =
 	say("\f2regular commands: ",cn)
 	say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
 	say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
-	say("\f2	colors:\fN  !colors  !setcolor <color>  !colorsay <color> <text>", cn)
+	say("\f2	colors:\fN  !setcolor <color>  !colorsay <color> <text>", cn)
 	say("\f2	other:\fN   !addminute  !allcmds  !cmds  !pm <cn> <text>  !whois <cn>",cn)
 
 	if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
@@ -886,14 +886,6 @@ commands =
 
     end
   };
-
-["!colors"] =		-- display all avaiable colors
-{
-	0;
-	function (cn, args)
-		say("\f00\f11\f22\f33\f44\f55\f66\f77\f88\f99\fAA\fBB\fCC\fDD\fEE\fFF\fGG\fHH\fII\fJJ\fKK\fLL\fMM\fNN\fOO\fPP\fQQ\fRR\fSS\fTT\fUU\fVV\fWW\fXX\fYY\fZZ\f0",cn)
-	end
-};
 
 ["!colorsay"] =
 {
