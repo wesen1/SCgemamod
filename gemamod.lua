@@ -542,41 +542,6 @@ function ishigher(cn,tcn)		-- compare player level of cn and tcn
 	end
 end
 
-----------------
-
-muted = {}
-
-function mute(tcn, reason)		-- mute tcn
-	if isconnected (tcn) then
-		if muted[getip(tcn)] ~= nil then return false end
-		muted [getip(tcn)] = reason
-	end
-	return true
-end
-
-function unmute(tcn)			-- unmute tcn
-	if isconnected (tcn) then
-		if muted [getip(tcn)] == nil then return false end
-		muted [getip(tcn)] = nil
-	end
-	return true
-end
-
-function ismuted(cn)			-- status
-	if muted[getip(cn)] == nil then return false
-	else return true
-	end
-end
-
-function muted_reason(cn)		-- reason for muting cn
-	return muted[getip(cn)]
-end
-
-function reset_table()			-- delete all muted entries
-	local reset = {}
-	return reset
-end
-
 -----------------
 
 start_times = {}
@@ -883,7 +848,7 @@ commands =
 	if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
     say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
-	say("\f8                       !mute <cn> <reason>  !unlock <cn>  !unmute <cn>  !who <cn>")
+	say("\f8                       !unlock <cn> !who <cn>")
     end
 
 	if isadmin(cn) then
@@ -1300,24 +1265,6 @@ commands =
 	end
 };
 
-["!mute"] =
-{
-	1;
-	function (cn, args)
-		if #args >= 2 then
-			local tcn = tonumber(args[1])
-			if ishigher(cn, tcn) and isconnected(tcn) then
-				if mute(tcn , table.concat (args, " ", 2)) == true then 
-					say ("\f3" .. getname(tcn) .. " has been muted by " .. getname(cn) .. ", reason : " .. muted_reason(tcn))
-					logline(4, getname(tcn) .. " has been muted by " .. getname(cn) .. ", reason : " .. muted_reason(tcn))
-				else say("\f3error, this player is already muted",cn)
-				end
-			else say("\f3error, invalid cn or no permission to mute this player",cn)
-			end
-		end
-	end
-};
-
 ["!unlock"] =
 {
 	1;
@@ -1326,20 +1273,6 @@ commands =
 			local tcn = tonumber(args[1])
 			if tcn~=nil and isconnected(tcn) then unlock(tcn) end
 			say ("\f3player " .. getname(tcn) .. " has been unlocked!")
-		end
-	end
-};
-
-["!unmute"] =
-{
-	1;
-	function (cn, args)
-		if #args == 1  and isconnected(cn) then
-			local tcn = tonumber(args[1])
-			if unmute(tcn) == true then  say ("\f3" .. getname(tcn) .. " has been unmuted")
-			else say("\f3error, this player is not muted",cn)
-			end
-		else say ("\f3error, cn not connected",cn)
 		end
 	end
 };
