@@ -668,30 +668,6 @@ end
 
 ---------------
 
-locked = {}					-- lock players means : mute, force to and keep in spectate mode, voteend no on all of this players votes
-
-function islocked(cn)			-- status
-	if locked[cn] ~= nil then return true
-	else return false
-	end
-end
-
-function lock(cn,tcn,reason)	-- lock a troll
-	if isconnected(cn) and ishigher(cn,tcn) then
-		locked[cn] = reason
-		muted[cn] = "you are locked down"
-		return true
-	else
-		return false
-	end
-end
-
-function unlock(tcn)			-- unlock tcn
-	if islocked(cn) then locked[cn] = nil end
-end
-
----------------
-
 --	other stuff
 
 ignore = {}		-- ignore table, if "cn target_cn" == true then cn ignores target_cn 
@@ -847,8 +823,7 @@ commands =
 
 	if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
-    say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
-	say("\f8                       !unlock <cn> !who <cn>")
+    say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>",cn)
     end
 
 	if isadmin(cn) then
@@ -1224,26 +1199,6 @@ commands =
 	end
 };
 
-["!lock"] =
-{
-	1;
-	function (cn,args)
-		if #args >= 2 then
-			local tcn = tonumber(args[1])
-			local reason = table.concat(args," ", 2)
-			if tcn~= nil and isconnected (tcn) then
-				if lock(cn,tcn,reason) then 
-					say ("\f3player " .. getname(tcn) .. " has been locked (reason: )" .. reason,cn) 
-				else say("\f3error, player has a higher or same role like you",cn)
-				end
-			end
-			
-		else
-			say ("\f3error, invalid arguments",cn)
-		end
-	end
-};
-
 ["!logout"] =
 {
 	1;
@@ -1253,18 +1208,6 @@ commands =
 			say ("\f9" .. getname(cn) .. " logged out")
 		else
 			say("\f3use /setadmin 0 to logout",cn)
-		end
-	end
-};
-
-["!unlock"] =
-{
-	1;
-	function (cn,args)
-		if #args == 1 then
-			local tcn = tonumber(args[1])
-			if tcn~=nil and isconnected(tcn) then unlock(tcn) end
-			say ("\f3player " .. getname(tcn) .. " has been unlocked!")
 		end
 	end
 };
