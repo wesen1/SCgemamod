@@ -1461,15 +1461,6 @@ function onPlayerSayText(cn, text)
 	return PLUGIN_BLOCK
 end
 
-function onPlayerSendMap(map_name, cn, upload_error)
-   if not is_gema(map_name) then
-      say("\f3This map is not a gema map! Make sure your map name contains g3/ema/@/4", cn)
-      upload_error = UE_IGNORE
-      return upload_error
-   end
-   -- add map to all maps maprot?
-end
-
 function onPlayerSpawn(cn)
 	
 	--start_times[cn] = socket.gettime()	-- nano seconds
