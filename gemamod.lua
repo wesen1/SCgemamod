@@ -672,25 +672,6 @@ end
 
 ignore = {}		-- ignore table, if "cn target_cn" == true then cn ignores target_cn 
 
-function is_gema(mapname)			-- check if mapname contains g3ema@4		
-	local implicit = { "jigsaw", "deadmeat-10" }
-	local code ={"g","3e","m","a@4"}
-	mapname = mapname:lower()
-	for k,v in ipairs(implicit) do
-		if mapname:find(v) then return true end
-	end
-	for i = 1, #mapname - #code + 1 do
-		local match = 0
-		for j = 1, #code do
-			for k = 1, #code[j] do
-				if mapname:sub(i+j-1, i+j-1) == code[j]:sub(k, k) then match = match + 1 end
-			end
-		end
-		if match == #code then return true end
-	end
-	return false
-end
-
 function isip(ip) 					-- check if a given string can be interpreted as an ip
 	local splitted_ip = split(ip,".")
 	if #splitted_ip ~= 4 then return false end
@@ -1380,9 +1361,6 @@ function onPlayerCallVote(acn, type, text, number)
 	elseif (type == SA_FORCETEAM) and not (isadmin(cn) or ismodo(cn)) then
 		voteend(VOTE_NO)
 		say ("\f3You are not allowed to vote that!", cn)
-	elseif (type == SA_MAP) and not ((number == GM_CTF) and is_gema(text)) then 
-		voteend(VOTE_NO)
-		say ("\f3Only CTF mode is allowed. Make sure that your mapname contains g3/ema/@/4!")
 	end
    
    --if type == SA_KICK or type == SA_BAN then
