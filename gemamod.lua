@@ -643,29 +643,6 @@ function reset_minute_limit ()	-- reset addminute counter
 	minute_limit = 0
 end
 
-----------------
-
-function savename(name,ip) 	-- names log
-	local exists = false
-	local data = cfg.getvalue("ipnames",ip)	
-	local lines = {}	
-	if data ~= nil then
-		lines = split(data, "\t")
-		for i=1, #lines, 1 do
-		   if lines[i] == name then exists = true end
-		end
-	end
-	if not exists then table.insert(lines, name)
-		cfg.setvalue("ipnames", ip, table.concat(lines, "\t"))
-	end
-end
-
-function load_names(ip)		-- load names log
-	local data = cfg.getvalue ("ipnames", ip)
-	local lines = split(data,"\t")
-	return lines
-end
-
 ---------------
 
 --	other stuff
@@ -1198,7 +1175,7 @@ commands =
 			if tonumber(args[1]) ~= nil then
 				tcn = tonumber(args[1])
 				if isconnected(tcn) then
-					names = load_names (getip(tcn))
+					names = {"names", "that", "the", "ip", "used"}
 					show_names = ""
 					for i = 1, #names, 1 do
 						if i == 1 then show_names = names[i]
@@ -1397,7 +1374,6 @@ function onPlayerConnect(cn)
 	
 	text_color[cn] =  "Q"	-- default text color
 	modos[cn] = false
-	savename (getname(cn), getip(cn))
 
 	ignore[cn..""..cn] = true
 end
@@ -1411,10 +1387,6 @@ function onPlayerDisconnect(cn, reason)
 		ignore[cn..""..i] = false
 		ignore[i..""..cn] = false
 	end
-end
-
-function onPlayerNameChange (acn, new_name)
-	savename(new_name,getip(acn))
 end
 
 function onPlayerSayText(cn, text)
