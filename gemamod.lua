@@ -850,8 +850,7 @@ commands =
      say("\fPregular commands: \fN!addminute   !allcmds   !grank   !gtop   !maptop    !mrank   !pm <cn> <text>",cn)
     if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
-    say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
-	say("\f9                       !unlock <cn>  !who <cn>")
+    say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>", cn)
     end
 
 	if isadmin(cn) then
@@ -1374,9 +1373,7 @@ function onMapChange ()
 end
 
 function onPlayerCallVote(acn, type, text, number)
-	
-	if islocked(acn) then voteend(VOTE_NO) return end
-	
+
 	if (type == SA_AUTOTEAM) or (type == SA_CLEARDEMOS) or (type == SA_SHUFFLETEAMS) then 
 		voteend(VOTE_NO)
 		say ("\f3You are not allowed to vote that!", cn)
@@ -1477,5 +1474,4 @@ function onPlayerSpawn(cn)
 	
 	--start_times[cn] = socket.gettime()	-- nano seconds
 	start_times[cn] = getsvtick()
-	if islocked(cn) then setteam (cn, 4, FTR_SILENTFORCE) end
 end
