@@ -671,7 +671,6 @@ end
 --	other stuff
 
 ignore = {}		-- ignore table, if "cn target_cn" == true then cn ignores target_cn 
-hour = os.date( "%h" , os.time() ) 	-- get actual hour
 
 function is_gema(mapname)			-- check if mapname contains g3ema@4		
 	local implicit = { "jigsaw", "deadmeat-10" }
@@ -852,7 +851,7 @@ commands =
     if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
     say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !lock <cn> <reason>  !logout",cn)
-	say("\f9                       !mute <cn> <reason>  !unlock <cn>  !unmute <cn>  !who <cn>")
+	say("\f9                       !unlock <cn>  !who <cn>")
     end
 
 	if isadmin(cn) then
@@ -1081,9 +1080,8 @@ commands =
 		if #args >= 2 then
 			local to, text = tonumber(args[1]), table.concat(args, " ", 2)
 			if not isconnected(to) then say("\f3wrong cn",cn)
-			elseif ignore [to.. "" .. cn] ~= true and not ismuted(cn) then say("\fJ" .. getname(cn) .. "\f2 (PM)\fJ:\f9 " .. text,to)
+			elseif ignore [to.. "" .. cn] ~= true then say("\fJ" .. getname(cn) .. "\f2 (PM)\fJ:\f9 " .. text,to)
 			elseif ignore [to.. "" .. cn] == true then say("\f3could not send message : " .. getname(to) .. " ignored all of your messages",cn)
-			elseif ismuted(cn) then say ("\f3Message could not be delivered. You have been muted (reason: " .. muted_reason(cn) .. ")",cn)
 			end
 		end
 	end
@@ -1368,7 +1366,6 @@ end
 
 function onInit()
 load_gtop()
-muted = reset_table()
 end
 
 function onMapChange ()
@@ -1426,12 +1423,7 @@ function onPlayerConnect(cn)
 	text_color[cn] =  "Q"	-- default text color
 	modos[cn] = false
 	savename (getname(cn), getip(cn))
-	
-	if hour ~= os.date( "%h" , os.time() ) then	-- delete muted table every new hour in case someone forgets to unmute somebody
-		muted = reset_table()
-		hour = os.date( "%h" , os.time() ) 
-	end
-	
+
 	ignore[cn..""..cn] = true
 end
 
@@ -1468,11 +1460,8 @@ function onPlayerSayText(cn, text)
 		return PLUGIN_BLOCK
 	end
 		
-	if not ismuted(cn) then 
-		SayToAll(text, cn, get_text_color(cn))
-		return PLUGIN_BLOCK
-	else say ("\f3Message could not be delivered. You have been muted (reason: " .. muted_reason(cn).. ")",cn)
-	end
+	SayToAll(text, cn, get_text_color(cn))
+	return PLUGIN_BLOCK
 end
 
 function onPlayerSendMap(map_name, cn, upload_error)
