@@ -1351,20 +1351,7 @@ function onPlayerCallVote(acn, type, text, number)
 end
 
 function onPlayerConnect(cn)
-	
-	local count = 0
-	
-	for i = 0, 15, 1 do
-		if isconnected(i) then
-			if getip(i) == getip(cn) then count = count + 1 end
-		end
-	end
-	
-	if count >= 3 then
-	say ("\f3" .. getname(cn) .. " could not connect [to many connections with same IP]" )
-	disconnect(cn, DISC_NONE) 
-	end
-	
+
 	setautoteam (false)		-- needed when it is the first player who connects to the server
 	
 	say("\fJWelcome \f2" .. getname(cn) .. "\fJ!")
@@ -1380,7 +1367,6 @@ end
 
 function onPlayerDisconnect(cn, reason)
 
-	if reason == DISC_BANREFUSE then say ("\f3" .. getname(cn) .. " could not connect [banned]") end
 	if ismodo(cn) then logout(cn) end
 
 	for i = 0, 20, 1 do
@@ -1412,7 +1398,6 @@ function onPlayerSayText(cn, text)
 end
 
 function onPlayerSpawn(cn)
-	
 	--start_times[cn] = socket.gettime()	-- nano seconds
 	start_times[cn] = getsvtick()
 end
