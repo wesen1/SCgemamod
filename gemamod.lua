@@ -763,7 +763,7 @@ commands =
       say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
       say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
       say("\f2	colors:\fN  !setcolor <color>  !colorsay <color> <text>", cn)
-      say("\f2	other:\fN   !cmds  !pm <cn> <text>  !whois <cn>",cn)
+      say("\f2	other:\fN   !cmds  !whois <cn>",cn)
 
       if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
       else
@@ -779,7 +779,7 @@ commands =
     -- Most important cmds:
     --[[
 
-     say("\fPregular commands: \fN!grank   !gtop   !maptop    !mrank   !pm <cn> <text>",cn)
+     say("\fPregular commands: \fN!grank   !gtop   !maptop    !mrank",cn)
     if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
     say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>", cn)
@@ -1001,20 +1001,6 @@ commands =
 	function (cn)
 		for i=0,5,1 do
 			mrank(getname(cn), usergun(i), true, cn)
-		end
-	end
-};
-
-["!pm"] =
-{
-	0;
-	function (cn,args)
-		if #args >= 2 then
-			local to, text = tonumber(args[1]), table.concat(args, " ", 2)
-			if not isconnected(to) then say("\f3wrong cn",cn)
-			elseif ignore [to.. "" .. cn] ~= true then say("\fJ" .. getname(cn) .. "\f2 (PM)\fJ:\f9 " .. text,to)
-			elseif ignore [to.. "" .. cn] == true then say("\f3could not send message : " .. getname(to) .. " ignored all of your messages",cn)
-			end
 		end
 	end
 };
