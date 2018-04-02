@@ -635,14 +635,6 @@ function save_records(map, records, weapon)		-- save records to a specific mapto
    cfg.setvalue(filename, map:gsub("=", ""), table.concat(lines, "\t"))
 end
 
------------------
-
-minute_limit = 0					-- counter for !addminute
-
-function reset_minute_limit ()	-- reset addminute counter
-	minute_limit = 0
-end
-
 ---------------
 
 --	other stuff
@@ -753,45 +745,6 @@ commands =
 
 -- unarmed commands
 
-["!addminute"] =	-- add one minute to the game, 10 times usable per game
-{
-	0;
-	function (cn, args)
-		minute_limit = minute_limit + 1
-		if minute_limit <= 10 then
-			local timeleft = gettimeleft() + 2
-			settimeleft (timeleft)
-			say("\f9remaining time changed to " .. timeleft .." minutes")
-		else
-			say("\f3error, you can only add a maximum of 10 extra minutes.", cn) 
-		end
-	end
-};
-
-["!allcmds"] = 			-- show all avaiable commands and parameters
-{
-	0;
-	function (cn, args)
-	say("\f2regular commands: ",cn)
-	say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
-	say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
-	say("\f2	colors:\fN  !setcolor <color>  !colorsay <color> <text>", cn)
-	say("\f2	other:\fN   !addminute  !allcmds  !cmds  !pm <cn> <text>  !whois <cn>",cn)
-
-	if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
-	else
-    say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>",cn)
-    end
-
-	if isadmin(cn) then
-		say("\f3admin commands: !addmod <password>  !blacklist <cn>/<ip> <reason>  !delmod <cn>  !delrecord <name> <weapon>  !demote <cn>  !promote<cn>",cn)
-    end
-
-	say("\fMweapons: 1 = Assault Rifle   2 = Submachine Gun   3 = Sniper Rifle   4 = Shotgun   5 = Carbine",cn)
-
-    end
-  };
-
 ["!check"] =	-- for players: check with which weapons you finished the map => evtl mit in mrank einbauen
 {
 	0;
@@ -805,7 +758,28 @@ commands =
 {
     0;
     function (cn, args)
-     say("\fPregular commands: \fN!addminute   !allcmds   !grank   !gtop   !maptop    !mrank   !pm <cn> <text>",cn)
+
+      say("\f2regular commands: ",cn)
+      say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
+      say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
+      say("\f2	colors:\fN  !setcolor <color>  !colorsay <color> <text>", cn)
+      say("\f2	other:\fN   !cmds  !pm <cn> <text>  !whois <cn>",cn)
+
+      if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
+      else
+      say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>",cn)
+      end
+
+      if isadmin(cn) then
+          say("\f3admin commands: !addmod <password>  !blacklist <cn>/<ip> <reason>  !delmod <cn>  !delrecord <name> <weapon>  !demote <cn>  !promote<cn>",cn)
+      end
+
+      say("\fMweapons: 1 = Assault Rifle   2 = Submachine Gun   3 = Sniper Rifle   4 = Shotgun   5 = Carbine",cn)
+
+    -- Most important cmds:
+    --[[
+
+     say("\fPregular commands: \fN!grank   !gtop   !maptop    !mrank   !pm <cn> <text>",cn)
     if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
 	else
     say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>", cn)
@@ -814,6 +788,7 @@ commands =
 	if isadmin(cn) then
 		say("\f3admin commands: !addmod <password>  !blacklist <cn>/<ip> <reason>  !delmod <cn>  !delrecord <name> <weapon>  !demote <cn>  !promote<cn>",cn)
     end
+        --]]
 
     end
   };
@@ -1327,7 +1302,6 @@ end
 
 function onMapChange ()
 	sendMOTD()
-	reset_minute_limit()	-- reset minute limit for !addminute command
 end
 
 function onPlayerCallVote(acn, type, text, number)
@@ -1358,7 +1332,7 @@ function onPlayerConnect(cn)
 	local country, geoip = whois(cn)
 	say("\f2" .. getname(cn) .. " \fJ(\f1" ..cn.. "\fJ) connected from \f2" ..country.. "\f9 (" ..geoip.. ")")
 	sendMOTD(cn)
-	
+
 	text_color[cn] =  "Q"	-- default text color
 	modos[cn] = false
 
@@ -1390,9 +1364,8 @@ function onPlayerSayText(cn, text)
 			end
 		else	say ("\f3Unknown command, check your spelling and try again",cn)	-- error in case of non existant command
 		end
-		return PLUGIN_BLOCK
 	end
-		
+
 	SayToAll(text, cn, get_text_color(cn))
 	return PLUGIN_BLOCK
 end
