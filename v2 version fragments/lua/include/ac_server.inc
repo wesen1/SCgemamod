@@ -149,7 +149,7 @@ function getWeaponsFinished ()
                     		         WHERE map = ]].. map_id ..[[
                  		       )
                  	ORDER BY weapon.number ASC;]]
-	      
+
 	return db:query (sql)
 	
 end
@@ -174,22 +174,6 @@ function getWeaponsMissing ()
 end
 
 
---
--- Get the map id from a mapname
---
-function getMapId (mapname)
-
-	local result = db:query("SELECT id FROM map WHERE name='".. mapname .."';")
-
-	if result == nil then
-		return nil
-	else
-		return result[1].id
-	end
-end
-
-
-
 -- check whether there is a vote pending
 function isVotePending ()
 
@@ -204,105 +188,4 @@ function isVotePending ()
 	end
 	
 	return isvote
-end
-
-
--- set tabs until you are one tab stop behind the longest string
--- input: cur_string (Integer): length of current string
---	  longest_string (Integer): length of the longest string in displayed set of strings
--- only works with default font
-function getTabs (cur_string, longest_string)
-
-	local tabs = ""
-	local tab_width = 8 * 38
-	
-	print(longest_string.. " - ".. cur_string .." = ".. (longest_string - cur_string))
-	
-	local next_tab = math.ceil(longest_string / tab_width) -- get first tab position after longest string	
-	local amount_tabs = next_tab - math.floor(cur_string / tab_width) -- get amount of tabs for curre
-	
-
-	for i = 1, amount_tabs do
-		tabs = tabs .."\t"
-	end
-	
-	
-	return tabs
-
-	
-	
-	--[[
-	if cur_string % tab_width == 0 then
-
-		if cur_string == longest_string then
-			tabs = "\t"
-			
-			cur_string = cur_string + 1
-		end
-	end
---]]	
-	
-end
-
-
---
--- get pixel width of default font
---
-function getStringWidth (string)
-
-	string = string:gsub("\f.", "")		-- extract colors from cur_string
-
-	local string_width = 0
-	
-	for i = 1, #string do
-	
-		local character = string.sub(string,i,i)
-		
-		if character == " " then
-			character = "space"
-		end
-
-		local character_width = tonumber(cfg.getvalue("font_default", character))
-
-		string_width = string_width + character_width
-	
-	end
-	
-	return string_width
-
-end
-
-
-
---
--- load font width from config file and save it in a lua config file
---
-function getFontConfig ()
-
-	local file = "config/font_default.cfg"
-
-	local f = io.open(file, "rb")
-	
-	for line in io.lines(file) do
-	
-		if string.match(line, "fontchar") then
-
-			local line = line:gsub("fontchar ", "")
-
-			local data = split(line, "//")	
-			local dimensions = split(data[1], " ")
-
-
-			local width = dimensions[3]
-			local character = string.gsub(data[2], " ", "")
-			
-			cfg.setvalue("font_default", character, width)
-		end
-		
-	end
-	
-	cfg.setvalue("font_default", "space", 32)
-
-	f:close()
-
 end
