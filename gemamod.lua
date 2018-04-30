@@ -438,32 +438,6 @@ function mapbest (mapname,weapon, cn)		-- get best player of each maptop
 	end
 end
 
-------------------
-
-text_color = {}
-
-function get_text_color (cn)	-- get the text color a player has (default color is set on player connect)
-	return color(text_color[cn])
-end
-
-function color(id)				-- make a single char to \f* to use it later to color the text
-	local textcolor = nil
-	if id ~= nil then
-		if tonumber(id) ~= nil then
-			if tonumber(id) < 10 and tonumber(id) >= 0 then textcolor = "\f" .. tonumber(id) end
-		elseif id >= "A" and id <="Z" then textcolor = "\f" .. id
-		elseif id >= "a" and id <="z" then textcolor = "\f" .. string.upper(id)
-		end
-	end
-	return textcolor
-end
-
-function iscolor(id)			-- check if a color string is in this format \f*
-	if string.sub(id,1,2) == "\f" and color(string.sub(id,3,3)) ~= nil then return true
-	else return false
-	end
-end
-
 -----------------
 
 modos= {} -- moderators table, if modos[cn] ~= false then player is moderator
@@ -656,22 +630,21 @@ function say(text, cn)				-- say text to cn
 	clientprint(cn,text)
 end
 
-function SayToAll(text, cn, color)	-- say text to all, color = text color
+function SayToAll(text, cn)	-- say text to all
 	local name_color = "\f2"
 	if isadmin(cn) then name_color = "\f3"
 	elseif ismodo(cn) then name_color = "\f9"
 	end
 
-	if color == nil then color = "\fP" end
 	if not isadmin(cn) and not ismodo(cn) then
 		for n=0,20,1 do
 			if isconnected(n) and ignore[n..""..cn] ~= true then
-				say(name_color .. "".. getname(cn) .. ": " .. color .. "" .. text,n)
+				say(name_color .. "".. getname(cn) .. ": " .. text,n)
 			end
 		end
 	else
 		for n=0,16,1 do
-			if isconnected (n) and (n ~= cn or ignore[cn..""..n]==false) then say(name_color .. "".. getname(cn) .. ":" .. color .. " " .. text,n) end
+			if isconnected (n) and (n ~= cn) then say(name_color .. "".. getname(cn) .. ": " .. text,n) end
 		end
 	end
 end
@@ -762,7 +735,6 @@ commands =
       say("\f2regular commands: ",cn)
       say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
       say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
-      say("\f2	colors:\fN  !setcolor <color>  !colorsay <color> <text>", cn)
       say("\f2	other:\fN   !cmds  !whois <cn>",cn)
 
       if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
@@ -792,22 +764,6 @@ commands =
 
     end
   };
-
-["!colorsay"] =
-{
-	0;
-	function (cn,args)
-		if #args >= 2 then
-			if #args[1] == 1 then
-				if color(args[1]) ~= nil then SayToAll(table.concat(args," ",2), cn, color(args[1])) 
-				else say("\f3invalid color id",cn)
-				end
-			else say("\f3invalid color id",cn)
-			end
-		else say("\f3invalid arguments")
-		end
-	end
-};
 
 ["!grank"] =		-- shows grank for every gtop
 {
@@ -1001,23 +957,6 @@ commands =
 	function (cn)
 		for i=0,5,1 do
 			mrank(getname(cn), usergun(i), true, cn)
-		end
-	end
-};
-
-["!setcolor"] =
-{
-	0;
-	function (cn,args)
-		if #args == 1 then
-			if #args[1] == 1 then
-				if color(args[1]) ~= nil then
-					text_color[cn] = args[1]
-					say (get_text_color(cn) .. "your chat messages will be displayed in this color now!",cn)
-				else say("\f3invalid color id",cn)
-				end
-			else say ("\f3invalid color id",cn)
-			end
 		end
 	end
 };
@@ -1319,7 +1258,6 @@ function onPlayerConnect(cn)
 	say("\f2" .. getname(cn) .. " \fJ(\f1" ..cn.. "\fJ) connected from \f2" ..country.. "\f9 (" ..geoip.. ")")
 	sendMOTD(cn)
 
-	text_color[cn] =  "Q"	-- default text color
 	modos[cn] = false
 
 	ignore[cn..""..cn] = true
@@ -1352,7 +1290,7 @@ function onPlayerSayText(cn, text)
 		end
 	end
 
-	SayToAll(text, cn, get_text_color(cn))
+	SayToAll(text, cn)
 	return PLUGIN_BLOCK
 end
 
