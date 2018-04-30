@@ -613,8 +613,6 @@ end
 
 --	other stuff
 
-ignore = {}		-- ignore table, if "cn target_cn" == true then cn ignores target_cn 
-
 function isip(ip) 					-- check if a given string can be interpreted as an ip
 	local splitted_ip = split(ip,".")
 	if #splitted_ip ~= 4 then return false end
@@ -637,14 +635,10 @@ function SayToAll(text, cn)	-- say text to all
 	end
 
 	if not isadmin(cn) and not ismodo(cn) then
-		for n=0,20,1 do
-			if isconnected(n) and ignore[n..""..cn] ~= true then
-				say(name_color .. "".. getname(cn) .. ": " .. text,n)
-			end
-		end
+	    say(name_color .. "".. getname(cn) .. ": " .. text, -1)
 	else
 		for n=0,16,1 do
-			if isconnected (n) and (n ~= cn) then say(name_color .. "".. getname(cn) .. ": " .. text,n) end
+			if isconnected(n) and (n ~= cn) then say(name_color .. "".. getname(cn) .. ": " .. text,n) end
 		end
 	end
 end
@@ -734,7 +728,6 @@ commands =
 
       say("\f2regular commands: ",cn)
       say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
-      say ("\f2	ignore:\fN  !ignore <cn>  !ignoreall  !unignore <cn>  !unignoreall",cn)
       say("\f2	other:\fN   !cmds  !whois <cn>",cn)
 
       if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
@@ -839,35 +832,6 @@ commands =
     end
 };
 
-["!ignore"] =
-{
-	0;
-	function (cn,args)
-		local acn = tonumber(args[1])
-		if ishigher(acn, cn) then 
-			if acn == cn then 
-			ignore[cn..""..acn] = true 
-			say("\f3you successfully ignored " .. getname(cn),cn)
-			else say ("\f3you can't igore players with a higher role than you!",cn)
-			end
-		elseif isconnected(acn) then 
-			ignore[cn..""..acn] = true 
-			say("\f3you successfully ignored " .. getname(cn),cn)
-		end
-	end
-};
-
-["!ignoreall"] =
-{
-	0;
-	function (cn,args)
-		for i = 0, 20, 1 do
-			if not ishigher(i, cn) then ignore[cn..""..i] = true end
-		end
-		say("\f3you successfully ignored all players",cn)
-	end
-};
-
 ["!login"] =
 {
 	0;
@@ -958,29 +922,6 @@ commands =
 		for i=0,5,1 do
 			mrank(getname(cn), usergun(i), true, cn)
 		end
-	end
-};
-
-["!unignore"] =
-{
-	0;
-	function (cn,args)
-		local tcn = tonumber(args[1])
-		if isconnected(tcn) then 
-			ignore[cn..""..tcn] = false 
-			say("\f3you successfully unignored " .. getname(tcn),cn)
-		end
-	end
-};
- 
-["!unignoreall"] =
-{
-	0;
-	function (cn,args)
-		for i = 0, 20, 1 do
-			if i ~= cn then ignore[cn..""..i] = false end
-		end
-		say("\f3you successfully unignored all players",cn)
 	end
 };
 
@@ -1260,17 +1201,10 @@ function onPlayerConnect(cn)
 
 	modos[cn] = false
 
-	ignore[cn..""..cn] = true
 end
 
 function onPlayerDisconnect(cn, reason)
-
 	if ismodo(cn) then logout(cn) end
-
-	for i = 0, 20, 1 do
-		ignore[cn..""..i] = false
-		ignore[i..""..cn] = false
-	end
 end
 
 function onPlayerSayText(cn, text)
