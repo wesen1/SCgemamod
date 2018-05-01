@@ -344,84 +344,6 @@ end
 
 -----------------
 
-modos= {} -- moderators table, if modos[cn] ~= false then player is moderator
-
-function addmod(password)		-- add moderator password
-	local passwords = {}
-	if file_exists ("lua/config/modos.cfg") then 
-		passwords = cfg.getvalue ("modos", "passwords") 
-	end
-	table.insert(passwords,password)
-	cfg.setvalue("modos", "passwords", table.concat(passwords,"\t"))
-end
-
-function delmod(cn)				-- delete moderator password used by cn
-	local passwords = cfg.getvalue ("modos", "passwords")
-	if modos[cn] == "promote" then demote(cn) return
-	else
-		if passwords~= nil then
-			passwd = split(passwords, "\t")
-			for i = 1, #passwd, 1 do
-				if passwd[i] == modos[cn] then table.remove (passwords, i) end
-			end
-		end
-		cfg.setvalue("modos", "passwords", table.concat(passwords, "\t"))
-	end
-end
-
-function demote (tcn)			-- set modos[cn] = false
-	if not isconnected (tcn) or not ismodo(tcn) then return false end
-	modos[tcn] = false
-	return true
-end
-
-function ismodo(cn)				-- status
-	if modos[cn] ~= false then return true
-	else return false
-	end
-end
-
-function logout (cn)			-- set modos[(own cn)] false
-	if modos[cn] ~= "promote" then logline (4,"[" .. getip(cn) .. "] player " .. getname(cn) .. " used moderator password (" .. modos[cn] ..")\nSet role of player " .. getname(cn) .. " to normal player") end
-	modos[cn] = false
-end
-
-function login (cn, password)	-- set modos[(own cn)] = password
-	local passwords = cfg.getvalue ("modos", "passwords")
-	if passwords ~= nil then
-		passwd = split(passwords, "\t")
-		for i = 1, #passwd, 1 do
-			if passwd[i] == password then 
-				modos[cn] = password
-				logline (4,"[" .. getip(cn) .. "] player " .. getname(cn) .. " used moderator password (" .. password ..")\nSet role of player " .. getname(cn) .. " to moderator")
-				return true
-			end
-		end
-		return false
-	end
-end 
-
-function promote (tcn)			-- set modos[cn] = "promote"
-  if not isconnected (tcn) or ismodo(tcn) or isadmin(tcn) then return false end
-  modos[tcn] = "promote"
-  return true
-end
-
-function getlevel (cn)			-- admin = 2, moderator = 1, unarmed = 0
-	if isadmin(cn) then return 2
-	elseif ismodo(cn) then return 1
-	else return 0
-	end
-end
-
-function ishigher(cn,tcn)		-- compare player level of cn and tcn
-	if getlevel(cn) > getlevel(tcn) then return true
-	else return false
-	end
-end
-
------------------
-
 start_times = {}
 
 function add_record(delta,player,weapon,map)	-- save record if it is a better record than last record of player and update gtop
@@ -535,10 +457,9 @@ end
 function SayToAll(text, cn)	-- say text to all
 	local name_color = "\f2"
 	if isadmin(cn) then name_color = "\f3"
-	elseif ismodo(cn) then name_color = "\f9"
 	end
 
-	if not isadmin(cn) and not ismodo(cn) then
+	if not isadmin(cn) then
 	    say(name_color .. "".. getname(cn) .. ": " .. text, -1)
 	else
 		for n=0,16,1 do
@@ -608,7 +529,7 @@ function file_exists(name)			-- check if file "name" exists
    if f~=nil then io.close(f) return true else return false end
 end
 
--- params: level 	-> admin = 2, modo = 1, unarmed = 0
+-- params: level 	-> admin = 2, unarmed = 0
 -- build commands like that ["commandname"] = { level;function};
 
 commands = 
@@ -634,32 +555,14 @@ commands =
       say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
       say("\f2	other:\fN   !cmds",cn)
 
-      if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
-      else
-      say("\f9moderator commands: \f8!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>",cn)
-      end
-
       if isadmin(cn) then
-          say("\f3admin commands: !addmod <password>  !blacklist <cn>/<ip> <reason>  !delmod <cn>  !delrecord <name> <weapon>  !demote <cn>  !promote<cn>",cn)
+          say("\f3admin commands: !blacklist <cn>/<ip> <reason>  !delrecord <name> <weapon>  !who <cn>",cn)
       end
 
       say("\fMweapons: 1 = Assault Rifle   2 = Submachine Gun   3 = Sniper Rifle   4 = Shotgun   5 = Carbine",cn)
 
     -- Most important cmds:
-    --[[
-
-     say("\fPregular commands: \fN!grank   !gtop   !maptop    !mrank",cn)
-    if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
-	else
-    say("\f2moderator commands: \f9!ban <cn> <reason>  !f1  !f2  !kick <cn> <reason>  !logout  !who <cn>", cn)
-    end
-
-	if isadmin(cn) then
-		say("\f3admin commands: !addmod <password>  !blacklist <cn>/<ip> <reason>  !delmod <cn>  !delrecord <name> <weapon>  !demote <cn>  !promote<cn>",cn)
-    end
-        --]]
-
-    end
+    -- regular commands: \fN!grank   !gtop   !maptop    !mrank
   };
 
 ["!grank"] =		-- shows grank for every gtop
@@ -734,21 +637,6 @@ commands =
 			end
 		end
     end
-};
-
-["!login"] =
-{
-	0;
-	function (cn,args)
-		if #args == 1 then
-			if login (cn, args[1]) == true  then
-				if not isadmin(cn) then say("\f9" .. getname(cn) .. " is now moderator!")
-				else say ("\f3error, you are already at moderator or higher level!",cn)
-				end
-			else say ("\f3wrong password",cn) 
-			end
-		end
-	end
 };
 
 ["!mapbest"] =	-- show the best time of every maptop
@@ -829,76 +717,12 @@ commands =
 	end
 };
 
--- moderator commands
 
-["!ban"] =
-{
-	1;
-	function (cn,args)
-		if #args >= 2 then
-			target_cn = tonumber(args[1])
-			reason = table.concat(args," ",2)
-			if isconnected(target_cn) and target_cn ~= cn and ishigher(cn,target_cn) then
-				say ("\f3" .. getname(target_cn) .. "has been banned by " .. getname(cn) .. " , reason : " .. reason)
-				ban (target_cn, DISC_MBAN)
-			elseif not isconnect(target_cn) then say ("\f3you can't ban this player [cn not connected]",cn)
-			elseif target_cn == cn then say ("\f3you can't ban this player [cn is your own cn]",cn)
-			elseif not ishigher(cn,target_cn) then say ("\f3you can't ban this player [cn has a higher role than you]",cn)
-			end
-		else say ("\f3invalid arguments",cn)
-		end
-	end
-};
-
-["!f1"]=	-- same like admin F1
-{
-	1;
-	function ()
-		voteend(VOTE_YES)
-	end
-};
-
-["!f2"]=	-- same like admin F2
-{
-	1;
-	function ()
-		voteend(VOTE_NO)
-	end
-};
-
-["!kick"] =
-{
-	1;
-	function (cn,args)
-		if #args >= 2 then
-			target_cn = tonumber(args[1])
-			reason = table.concat(args," ",2)
-			if isconnected(target_cn) and target_cn ~= cn and ishigher(cn,target_cn) then
-				say ("\f3" .. getname(target_cn) .. "has been kicked by " .. getname(cn).. " , reason : " .. reason)
-				disconnect (target_cn , DISC_MKICK)
-			else say("\f3You can't kick yourself, not connected cns or a higher player than your role!")
-			end
-		else say ("\f3invalid arguments",cn)
-		end
-	end
-};
-
-["!logout"] =
-{
-	1;
-	function (cn)
-		if ismodo(cn) then
-			logout(cn)
-			say ("\f9" .. getname(cn) .. " logged out")
-		else
-			say("\f3use /setadmin 0 to logout",cn)
-		end
-	end
-};
+-- admin commands
 
 ["!who"] =	-- access names log
 {
-	1;
+	2;
 	function (cn,args)
       	if #args == 1 then
 			if tonumber(args[1]) ~= nil then
@@ -919,21 +743,6 @@ commands =
 			end
 		end
     end
-};
-
--- admin commands
-
-["!addmod"] =
-{
-	2;
-	function (cn,args)
-		if #args == 1 then
-			addmod(args[1])
-			say("\f3moderator successfully added",cn)
-		else
-			say ("\f3invalid arguments")
-		end
-	end
 };
 
 ["!blacklist"] = 	-- blacklist a player (cn or ip)
@@ -968,20 +777,6 @@ commands =
 		else say("\f3invalid arguments",cn) 
 		end
     end
-};	
-
-["!delmod"] =
-{	
-	2;
-	function (cn,args)
-		if #args == 1 then
-			local tcn = tonumber(args[1])
-			delmod(tcn)
-			say("\f3moderator successfully removed",cn)
-			demote(tcn)
-			say("\f3your moderator password was removed!",tcn)
-		end
-	end
 };
 
 ["!delrecord"] =	-- delete a record of a specific player, warning! : you can't undo this
@@ -999,31 +794,6 @@ commands =
 	   end
 	end
    };
-
-["!demote"] =	-- set role of a unarmed to moderator
-{
-	2;
-	function (cn,args)
-		if #args == 1 then
-			if demote(tonumber(args[1])) == true then say ("\f3" .. getname(tonumber(args[1])) .. " is not moderator anymore!")
-			else say("\f3error, cn is not moderator or is not connected",cn)
-			end
-		end
-	end
-};
-
-["!promote"] =	-- set role of a moderator to unarmed
-{ 
-	2;
-	function (cn,args)
-		if #args == 1 then
-			if promote(tonumber(args[1])) == true then say ("\f9" .. getname(target_cn) .. " is now moderator!")
-			else say ("\f3error, cn is moderator or is not connected",cn)
-			end
-		end
-	end
-};
-
 }
 
 function onFlagAction(cn, action, flag)
@@ -1063,16 +833,15 @@ function onPlayerCallVote(acn, type, text, number)
 	if (type == SA_AUTOTEAM) or (type == SA_CLEARDEMOS) or (type == SA_SHUFFLETEAMS) then 
 		voteend(VOTE_NO)
 		say ("\f3You are not allowed to vote that!", cn)
-	elseif (type == SA_FORCETEAM) and not (isadmin(cn) or ismodo(cn)) then
+	elseif (type == SA_FORCETEAM) and not isadmin(cn) then
 		voteend(VOTE_NO)
 		say ("\f3You are not allowed to vote that!", cn)
 	end
    
    --if type == SA_KICK or type == SA_BAN then
-      --if (isadmin(target_cn) or ismodo(target_cn)) then
+      --if (isadmin(target_cn)) then
       --voteend(VOTE_NO)
-      --say ("\f3You can't kick or ban moderators / admins !",cn)
-      --elseif ismodo(cn) then voteend(VOTE_YES)
+      --say ("\f3You can't kick or ban admins !",cn)
       --end
    --end
 
@@ -1085,12 +854,6 @@ function onPlayerConnect(cn)
 	say("\fJWelcome \f2" .. getname(cn) .. "\fJ!")
 	sendMOTD(cn)
 
-	modos[cn] = false
-
-end
-
-function onPlayerDisconnect(cn, reason)
-	if ismodo(cn) then logout(cn) end
 end
 
 function onPlayerSayText(cn, text)
@@ -1104,7 +867,6 @@ function onPlayerSayText(cn, text)
 		if commands[command] ~= nil then
 			local level, callback = commands[command][1], commands[command][2]
 			if (getlevel(cn) >= level) then callback(cn, args)
-			elseif command ~= "!logout" then say("\f3no permission!",cn)
 			end
 		else	say ("\f3Unknown command, check your spelling and try again",cn)	-- error in case of non existant command
 		end
