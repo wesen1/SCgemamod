@@ -2,102 +2,6 @@ PLUGIN_NAME = "wesen's gemamod"
 PLUGIN_AUTHOR = "wesen"
 PLUGIN_VERSION = "1.0"
 
-function geoip (ip)		-- replace last digit of an ip by "x"
-	local parts = split(ip,".")
-	return parts[1] .. "." .. parts[2] .. "." .. parts[3] .. ".x"
-end
-
-function getcountry(ip)	-- find country where given ip is located
-	local parts = split(ip, ".")
-	local tmp_first_byte = tonumber(parts[1])
-	local tmp_second_byte = tonumber(parts[2])
-	local tmp_third_byte = tonumber(parts[3])
-	local tmp_ipnum = 65536 * tmp_first_byte + 256 * tmp_second_byte + tmp_third_byte
-	local tmp_abbr = 0
-	local countries = {}
-	local country = ""
-
-	if tmp_ipnum >= 655360 and tmp_ipnum <= 720895 or tmp_ipnum >= 11276288 and tmp_ipnum <= 11280383 or tmp_ipnum >= 12625920 and tmp_ipnum <= 12626175 then return "private" end
-
-	local lines = split(cfg.getvalue("geoip/ipnum", tostring(tmp_first_byte)), "\t")
-
-	for i = 1, #lines, 1 do
-		local geoip_data = split (lines[i]," ")
-		if tonumber(geoip_data[1]) <= tmp_ipnum then tmp_abbr = geoip_data[2] end
-	end
-
-	tmp_abbr = {splitabbr (tmp_abbr)}
-	for i = 1, #tmp_abbr, 1 do
-		table.insert(countries, cfg.getvalue ("geoip/countrylist",tmp_abbr[i]))
-	end
-
-	if #countries == 0 then country = "nowhere"	
-	else
-		country = countries[1]
-		if #countries > 1 then
-			for i = 2, #countries, 1 do
-				country = country .. " or " .. countries[i]
-			end
-        end
-	end
-
-	return country
-end
-
-function whois(cn)		-- returns geoip, getcountry of cn
-	ip = getip(cn)
-	return geoip(ip), getcountry(ip)
-end
-
-function readAll(file)	-- read a file and save it in a table (each line = table entry)
-	local f = io.open(file, "rb")
-	lines = {}
-	for line in io.lines(file) do 
-		lines[#lines + 1] = line
-	end
-    f:close()
-    return lines
-end
-
-function splitabbr(str)	-- split a string into a table of 2 chars each entry
-	if #str>0 then return string.sub(str,1,2),splitabbr(string.sub(str,3)) end
-end
-
-function ipnums ()		-- use geoip_ipnum.txt and geoip_abbr.txt to create ipnum.cfg	->	[first digit] = ipnum country	ipnum country ... 
-	local ipnum = readAll("lua/config/geoip_ipnum.txt")		-- path to your geoip_ipnum.txt
-	local abbr = readAll("lua/config/geoip_abbr.txt")		-- path to your geoip_abbr.txt
-	local tmp_start = 0
-	local tmp_end = 0
-	local tmp_lines = {}
-	
-	for i = 2, #ipnum-1, 1 do
-		tmp_lines = {}
-		parts = split(ipnum[i]," ")
-		if parts[1] == "const" then
-			tmp_start = i+1
-		elseif parts[1] == "]" then
-			tmp_end = i-1
-			
-			for i = tmp_start, tmp_end, 1 do
-				table.insert(tmp_lines, ipnum[i] .. " " .. abbr[i] )
-			end
-			parts = split(ipnum[tmp_start - 1]," ")
-			cfg.setvalue("geoip/ipnum", string.sub(parts[2],17), table.concat(tmp_lines, "\t"))
-		end
-	end
-end
-
-function countrylist ()	-- use geoip_countrylist.txt to create countrylist.cfg	( [abbr] = country )
-	local countrylist = readAll("lua/config/geoip_countrylist.txt")
-	
-	for i = 3, #countrylist - 2, 1 do
-		local parts = split (countrylist[i], " ")
-		local tmp_abbr = string.gsub(parts[1],'"',"")
-		local tmp_countryname = string.gsub(table.concat(parts," ",2),'"',"")
-		cfg.setvalue ("geoip/countrylist",tmp_abbr, tmp_countryname)
-	end
-end
-
 -------------------
 cached_gtop = {}		-- cached gtop table, to make loading the gtops much faster
 
@@ -728,7 +632,7 @@ commands =
 
       say("\f2regular commands: ",cn)
       say("\f2 	records:\fN !check  !grank <name>  !gtop <weapon> <startrank>  !mapbest  !maptop <weapon> <startrank>  !mrank <name>")
-      say("\f2	other:\fN   !cmds  !whois <cn>",cn)
+      say("\f2	other:\fN   !cmds",cn)
 
       if not ismodo(cn) and not isadmin(cn) then say("\f2moderator commands: \f9 !login <password>",cn)
       else
@@ -921,22 +825,6 @@ commands =
 	function (cn)
 		for i=0,5,1 do
 			mrank(getname(cn), usergun(i), true, cn)
-		end
-	end
-};
-
-["!whois"] =
-{
-	0;
-	function (cn,args)
-		if #args == 1 then
-			local tcn = tonumber(args[1])
-			if isconnected (tcn) then
-				local ip, country = whois (tcn)
-				say ("\f2" .. getname(tcn) .. " \fJ(\f1" .. tcn .. "\fJ) connected from \f2" .. country .. " \fJ(\f9" .. ip .. "\fJ)", cn)
-			else say("\f3error, this client number isn't valid!",cn)
-			end
-		else say ("\f3error, invalid arguments",cn)
 		end
 	end
 };
@@ -1195,8 +1083,6 @@ function onPlayerConnect(cn)
 	setautoteam (false)		-- needed when it is the first player who connects to the server
 	
 	say("\fJWelcome \f2" .. getname(cn) .. "\fJ!")
-	local country, geoip = whois(cn)
-	say("\f2" .. getname(cn) .. " \fJ(\f1" ..cn.. "\fJ) connected from \f2" ..country.. "\f9 (" ..geoip.. ")")
 	sendMOTD(cn)
 
 	modos[cn] = false
