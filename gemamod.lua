@@ -391,7 +391,7 @@ commands =
       say("\f2	other:\fN   !cmds",cn)
 
       if isadmin(cn) then
-          say("\f3admin commands: !blacklist <cn>/<ip> <reason>  !delrecord <name> <weapon>  !who <cn>",cn)
+          say("\f3admin commands: !blacklist <cn>/<ip> <reason>  !delrecord <name> <weapon>",cn)
       end
 
       say("\fMweapons: 1 = Assault Rifle   2 = Submachine Gun   3 = Sniper Rifle   4 = Shotgun   5 = Carbine",cn)
@@ -478,31 +478,6 @@ commands =
 
 -- admin commands
 
-["!who"] =	-- access names log
-{
-	2;
-	function (cn,args)
-      	if #args == 1 then
-			if tonumber(args[1]) ~= nil then
-				tcn = tonumber(args[1])
-				if isconnected(tcn) then
-					names = {"names", "that", "the", "ip", "used"}
-					show_names = ""
-					for i = 1, #names, 1 do
-						if i == 1 then show_names = names[i]
-						else
-							show_names = show_names .. " , " .. names[i]
-						end
-					end
-				else say ("\f3error, invalid cn",cn)
-				end
-				say ("\f3" .. getip(tcn) .. " used these names: " .. show_names,cn)
-			else say ("\f3invalid arguments",cn)
-			end
-		end
-    end
-};
-
 ["!blacklist"] = 	-- blacklist a player (cn or ip)
 {
 	2;
@@ -576,10 +551,6 @@ function onFlagAction(cn, action, flag)
 		if player == getname(cn) and record == delta then say("\fH*****\fJnew best time for \f1"..getgun(getprimary(cn)).."!\fH*****") end
 		end
 	end
-end
-
-function onInit()
-load_gtop()
 end
 
 function onMapChange ()
