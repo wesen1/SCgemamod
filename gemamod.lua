@@ -16,6 +16,60 @@ function isip(ip) 					-- check if a given string can be interpreted as an ip
     return true
 end
 
+-- check whether there is a vote pending
+function isVotePending ()
+
+	isvote = false
+
+	for i in pairs (players) do
+		
+		if getvote(i) ~= 0 then
+			isvote = true
+			break
+		end
+	end
+	
+	return isvote
+end
+
+--
+-- returns with which weapons the map was finished
+--
+function getWeaponsFinished ()
+
+	-- get weapons with which the map was finished
+	local sql = [[ SELECT weapon.name AS weapon_name
+		       FROM weapon
+         	       WHERE weapon.id IN
+         			       ( SELECT weapon
+                    		         FROM record
+                    		         WHERE map = ]].. map_id ..[[
+                 		       )
+                 	ORDER BY weapon.number ASC;]]
+
+	return db:query (sql)
+	
+end
+
+
+--
+-- returns with which weapons the map was not finished yet
+--
+function getWeaponsMissing ()
+
+	local sql = [[ SELECT weapon.name AS weapon_name
+		       FROM weapon
+         	       WHERE weapon.id NOT IN
+         			           ( SELECT weapon
+                    		  	     FROM record
+                    		  	     WHERE map = ]].. map_id ..[[
+                 		 	   )
+                       ORDER BY weapon.number ASC;]]
+
+	return db:query (sql)
+
+end
+
 -- params: level 	-> admin = 2, unarmed = 0
 -- build commands like that ["commandname"] = { level;function};
 commands = 
